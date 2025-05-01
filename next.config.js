@@ -6,6 +6,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // This setting helps with GitHub Pages
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/lister-project/' : '',
+  trailingSlash: true,
 };
 
 module.exports = nextConfig; 

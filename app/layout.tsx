@@ -3,22 +3,14 @@ import { Saira } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const saira = Saira({ 
-  subsets: ["latin"], 
-  variable: '--font-saira',
-  display: 'swap'
-});
-
+const saira = Saira({ subsets: ["latin"], variable: '--font-saira' });
 const fogtwo = localFont({
   src: './fonts/FogtwoNo5.otf',
-  variable: '--font-fogtwo',
-  display: 'swap'
+  variable: '--font-fogtwo'
 });
-
 const vg5000 = localFont({
   src: './fonts/VG5000-Regular.otf',
-  variable: '--font-vg5000',
-  display: 'swap'
+  variable: '--font-vg5000'
 });
 
 export const metadata: Metadata = {
@@ -33,10 +25,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="favicon.ico" type="image/x-icon" sizes="16x16" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
       <body className={`
         ${saira.variable} 
         ${fogtwo.variable}

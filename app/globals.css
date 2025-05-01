@@ -9,6 +9,9 @@
   --accent: #000000; /* Black accent color */
   --border-color: #000000; /* Black borders */
   --shadow-color: rgba(0, 0, 0, 0.5);
+  --font-saira: var(--font-saira);
+  --font-fogtwo: var(--font-fogtwo); /* Fogtwo No5 by gluk */
+  --font-vg5000: var(--font-vg5000); /* VG5000 by Justin Bihan */
 }
 
 /* Dark mode colors are set through JavaScript */
@@ -22,6 +25,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-saira);
   min-height: 100vh;
   line-height: 1.6;
   transition: background-color 0.3s, color 0.3s; /* Smooth transition when switching modes */
@@ -299,45 +303,4 @@ h1, h2, h3 {
   image-rendering: pixelated;
   will-change: transform, opacity;
   animation: pixelConfettiGlow 0.8s ease-in-out infinite;
-}
-
-/* Fix for font display on GitHub Pages */
-@font-face {
-  font-family: 'Saira';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(/lister-project/_next/static/media/68647488cd82ef91-s.p.woff2) format('woff2');
-}
-
-@font-face {
-  font-family: 'FogTwo';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(/lister-project/_next/static/media/96db4756ac3d2b56-s.p.otf) format('otf');
-}
-
-@font-face {
-  font-family: 'VG5000';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(/lister-project/_next/static/media/e2541242c79572d7-s.p.otf) format('otf');
-}
-
-/* Mobile responsiveness fixes */
-@media (max-width: 640px) {
-  .neo-list-item {
-    transform: none;
-    margin-bottom: 0.5rem;
-  }
-  
-  .btn-outline {
-    padding: 0.4rem 1.2rem;
-  }
-  
-  h1 {
-    font-size: 2rem !important;
-  }
 }

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  // Update this with your GitHub repository name
+  // Update this to your actual repository name
   basePath: process.env.NODE_ENV === 'production' ? '/lister-project' : '',
   images: {
     unoptimized: true,
@@ -9,10 +9,6 @@ const nextConfig = {
   // This setting helps with GitHub Pages
   assetPrefix: process.env.NODE_ENV === 'production' ? '/lister-project/' : '',
   trailingSlash: true,
-  // Add this to ensure proper loading of CSS and other resources
-  webpack: (config) => {
-    return config;
-  },
 };
 
 module.exports = nextConfig; 

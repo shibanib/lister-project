@@ -93,50 +93,6 @@ This project can be deployed to GitHub Pages. To deploy:
    ```
 3. Push the generated `out` directory to the `gh-pages` branch
 
-## Deployment Instructions
-
-### Deploying to GitHub Pages
-
-1. Build the application:
-   ```bash
-   npm run build
-   ```
-
-2. Copy the build output to a docs folder:
-   ```bash
-   rm -rf docs && cp -R out docs
-   ```
-
-3. Create a `.nojekyll` file to bypass Jekyll processing:
-   ```bash
-   touch docs/.nojekyll
-   ```
-
-4. Commit and push your changes:
-   ```bash
-   git add .
-   git commit -m "Update deployment files"
-   git push
-   ```
-
-5. Configure GitHub Pages in your repository settings:
-   - Go to your repository on GitHub
-   - Navigate to Settings > Pages
-   - Under "Source", select "Deploy from a branch"
-   - Select "main" branch and "/docs" folder
-   - Click "Save"
-
-Your site will be available at: `https://[your-username].github.io/lister-project/`
-
-## Troubleshooting Deployment Issues
-
-If your deployed site has styling or layout issues:
-
-1. Check that your `next.config.js` has the correct `basePath` and `assetPrefix` settings
-2. Ensure all font references in CSS use the correct paths
-3. Add explicit font-face declarations in your CSS for backup font loading
-4. Check browser console for any 404 errors on CSS or font files
-
 ## License
 
 MIT

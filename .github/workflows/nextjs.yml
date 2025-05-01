@@ -1,8 +1,9 @@
-name: Deploy Next.js site to Pages
+name: Deploy Next.js site to Pages (disabled)
 
 on:
-  push:
-    branches: ["main"]
+  # Disable all triggers
+  # push:
+  #   branches: ["main"]
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages

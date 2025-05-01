@@ -9,6 +9,10 @@ const nextConfig = {
   // This setting helps with GitHub Pages
   assetPrefix: process.env.NODE_ENV === 'production' ? '/lister-project/' : '',
   trailingSlash: true,
+  // Add this to ensure proper loading of CSS and other resources
+  webpack: (config) => {
+    return config;
+  },
 };
 
 module.exports = nextConfig; 

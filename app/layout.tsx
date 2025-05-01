@@ -14,7 +14,7 @@ const vg5000 = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Listfully - Simple List Maker',
+  title: 'The Lister - Simple List Maker + Rearranger',
   description: 'Create, rearrange, and style lists with ease. Cross items out with a crayon and save automatically.',
 };
 

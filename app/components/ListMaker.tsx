@@ -618,7 +618,7 @@ export default function ListMaker() {
 
   return (
     <div 
-      className="min-h-screen px-4 md:px-8 py-12 relative" 
+      className="min-h-screen px-4 md:px-8 py-12 pb-36 md:pb-24 relative" 
       style={{ 
         backgroundColor: styleSettings.backgroundColor,
         color: styleSettings.textColor,
@@ -665,9 +665,8 @@ export default function ListMaker() {
         {showMenu && (
           <div 
             ref={menuRef}
-            className="absolute left-1/2 transform -translate-x-1/2 w-80 neo-settings-panel z-10"
+            className="absolute left-1/2 transform -translate-x-1/2 w-80 neo-settings-panel z-10 bottom-40 md:bottom-auto md:top-[20%]"
             style={{ 
-              top: '20%',
               backgroundColor: styleSettings.backgroundColor,
               borderColor: darkMode ? '#ffffff' : '#000000'
             }}
@@ -755,7 +754,15 @@ export default function ListMaker() {
       </div>
 
       {/* Pixel Art Style Icons in Bottom Right */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-4">
+      <div 
+        className="fixed bottom-0 max-w-full flex flex-row justify-center w-full px-4 gap-2 py-4 md:py-0 md:w-auto md:right-6 md:bottom-6 md:flex-col md:gap-4 md:px-0"
+        style={{ 
+          backgroundColor: `${darkMode ? 'rgba(26, 26, 26, 0.9)' : 'rgba(245, 240, 229, 0.9)'}`,
+          backdropFilter: 'blur(8px)',
+          boxShadow: `0 -2px 10px ${darkMode ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.1)'}`,
+          borderTop: `3px solid ${darkMode ? '#ffffff' : '#000000'}`
+        }}
+      >
         {/* Dark Mode Toggle - Pixel Art Style */}
         <button 
           onClick={toggleDarkMode} 
@@ -881,7 +888,7 @@ export default function ListMaker() {
       {showVisitCounter && (
         <div 
           ref={visitCounterRef}
-          className="fixed bottom-24 right-24 w-80 neo-settings-panel z-20 p-6"
+          className="fixed bottom-40 right-1/2 translate-x-1/2 w-80 neo-settings-panel z-20 p-6 md:bottom-24 md:right-24 md:translate-x-0"
           style={{ 
             backgroundColor: styleSettings.backgroundColor,
             borderColor: darkMode ? '#ffffff' : '#000000',
@@ -908,7 +915,7 @@ export default function ListMaker() {
       {showShuffleConfirm && (
         <div 
           ref={shuffleConfirmRef}
-          className="fixed bottom-24 right-24 w-80 neo-settings-panel z-20 p-6"
+          className="fixed bottom-40 right-1/2 translate-x-1/2 w-80 neo-settings-panel z-20 p-6 md:bottom-24 md:right-24 md:translate-x-0"
           style={{ 
             backgroundColor: styleSettings.backgroundColor,
             borderColor: darkMode ? '#ffffff' : '#000000',
@@ -948,7 +955,7 @@ export default function ListMaker() {
       {showInstructions && (
         <div 
           ref={instructionsRef}
-          className="fixed bottom-24 right-24 w-80 neo-settings-panel z-20 p-6"
+          className="fixed bottom-40 right-1/2 translate-x-1/2 w-80 neo-settings-panel z-20 p-6 md:bottom-24 md:right-24 md:translate-x-0"
           style={{ 
             backgroundColor: styleSettings.backgroundColor,
             borderColor: darkMode ? '#ffffff' : '#000000',

@@ -4,9 +4,12 @@ const nextConfig = {
   // Update this with your GitHub repository name
   basePath: process.env.NODE_ENV === 'production' ? '/lister-project' : '',
   
-  // The 'images' config needs to be at the top level, not inside experimental
-  // In Next.js 15.3.1, this is the correct format
-  unoptimizedImages: true,
+  // In Next.js 15.3.1, the correct way to handle unoptimized images
+  experimental: {
+    images: {
+      unoptimized: true
+    }
+  }
 };
 
 module.exports = nextConfig; 

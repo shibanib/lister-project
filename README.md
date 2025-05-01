@@ -1,5 +1,6 @@
-# List Maker
+# The Lister
 
+<div align="center">
 A simple web-based list making tool built with Next.js and TypeScript.
 
  <p>
@@ -7,6 +8,7 @@ A simple web-based list making tool built with Next.js and TypeScript.
     and
     <img src="https://svgl.app/library/typescript.svg" alt="Typescript Logo" height="60" style="margin-left: 20px"/>
   </p>
+</div>
 
 ## Features
 

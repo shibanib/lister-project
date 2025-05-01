@@ -1,26 +1,302 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light mode default colors */
+  --background: #f5f0e5; /* Sepia background as default */
+  --foreground: #000000; /* Black text */
+  --accent: #000000; /* Black accent color */
+  --border-color: #000000; /* Black borders */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --font-saira: var(--font-saira);
+  --font-fogtwo: var(--font-fogtwo); /* Fogtwo No5 by gluk */
+  --font-vg5000: var(--font-vg5000); /* VG5000 by Justin Bihan */
 }
 
+/* Dark mode colors are set through JavaScript */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-saira);
+  min-height: 100vh;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition when switching modes */
+}
+
+h1, h2, h3 {
+  font-weight: 400;
+  transform: rotate(-1deg);
+  display: inline-block;
+}
+
+/* Neo-brutalist divider */
+.divider {
+  height: 6px;
+  background-color: var(--foreground);
+  margin: 2rem 0;
+  transform: skew(-5deg);
+}
+
+/* Event list styling */
+.event-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.event-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 3px solid var(--border-color);
+}
+
+/* Font style classes */
+.font-saira {
+  font-family: var(--font-saira);
+}
+
+.font-fogtwo {
+  font-family: var(--font-fogtwo);
+}
+
+.font-vg5000 {
+  font-family: var(--font-vg5000);
+}
+
+/* Font attribution display */
+.font-attribution {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+/* Neo-brutalist focus states */
+*:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 0;
+}
+
+.input-focus:focus {
+  box-shadow: 6px 6px 0px var(--foreground);
+}
+
+/* Neo-brutalist button styling */
+.btn-outline {
+  border: 3px solid var(--foreground);
+  border-radius: 0;
+  padding: 0.6rem 1.8rem;
+  transition: all 0.1s;
+  transform: rotate(-1deg);
+  box-shadow: 5px 5px 0px var(--shadow-color);
+  font-weight: bold;
+}
+
+.btn-outline:hover {
+  background-color: var(--foreground);
+  color: var(--background);
+  transform: translate(2px, 2px) rotate(-1deg);
+  box-shadow: 3px 3px 0px var(--shadow-color);
+}
+
+/* Neo-brutalist list item styling */
+.neo-list-item {
+  border: 3px solid var(--foreground);
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 5px 5px 0px var(--shadow-color);
+  transform: rotate(-0.5deg);
+}
+
+.neo-list-item:hover, .neo-list-item.active {
+  transform: translate(-2px, -2px) rotate(-0.5deg);
+  box-shadow: 7px 7px 0px var(--shadow-color);
+}
+
+/* Minimal strikethrough animation */
+@keyframes draw-line {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-strikethrough {
+  animation: draw-line 0.3s ease-in-out forwards;
+}
+
+/* Neo-brutalist input styling */
+.neo-input {
+  border: 3px solid var(--foreground);
+  padding: 0.8rem 1rem;
+  box-shadow: 5px 5px 0px var(--shadow-color);
+}
+
+/* Settings panel styling */
+.neo-settings-panel {
+  border: 3px solid var(--foreground);
+  background-color: var(--background);
+  box-shadow: 8px 8px 0px var(--shadow-color);
+  transform: rotate(1deg);
+}
+
+/* Pixel Art Button Styling */
+.pixel-art-btn {
+  image-rendering: pixelated;
+  border: 0;
+  box-shadow: 4px 4px 0 #000;
+  font-family: monospace;
+  position: relative;
+  transition: transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out;
+  overflow: hidden;
+}
+
+.pixel-art-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, rgba(255,255,255,.1) 25%, transparent 25%, transparent 50%, 
+    rgba(255,255,255,.1) 50%, rgba(255,255,255,.1) 75%, transparent 75%, transparent);
+  background-size: 4px 4px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pixel-art-btn:hover {
+  transform: translateY(2px) translateX(2px);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.pixel-art-btn:active {
+  transform: translateY(4px) translateX(4px);
+  box-shadow: 0px 0px 0 #000;
+}
+
+.pixel-art-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Pixel art icons animation */
+.pixel-sun, .pixel-moon, .pixel-shuffle, .pixel-revert, .pixel-counter {
+  image-rendering: pixelated;
+  transform-origin: center;
+}
+
+.pixel-sun {
+  animation: pixelRotate 8s linear infinite;
+}
+
+.pixel-moon {
+  animation: pixelFloat 4s ease-in-out infinite;
+}
+
+.pixel-shuffle {
+  animation: pixelShake 2s ease-in-out infinite;
+}
+
+.pixel-revert {
+  animation: pixelBounce 2s ease-in-out infinite;
+}
+
+.pixel-counter {
+  animation: pixelPulse 3s ease-in-out infinite;
+}
+
+@keyframes pixelRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pixelFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes pixelShake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(8deg);
+  }
+  75% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes pixelBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.05);
+  }
+}
+
+@keyframes pixelPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+/* Icon-specific styling */
+.question-mark {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.down-arrow, .up-arrow {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.moon-sun {
+  font-size: 16px;
+}
+
+/* Pixel Confetti Styling */
+@keyframes pixelConfettiGlow {
+  0% {
+    filter: brightness(0.8);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+  100% {
+    filter: brightness(0.8);
+  }
+}
+
+.pixel-confetti-particle {
+  image-rendering: pixelated;
+  will-change: transform, opacity;
+  animation: pixelConfettiGlow 0.8s ease-in-out infinite;
 }

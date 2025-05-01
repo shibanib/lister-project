@@ -2,8 +2,8 @@ name: Deploy Next.js site to Pages
 
 on:
   # Temporarily disable auto-run on push
-  # push:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:

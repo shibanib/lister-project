@@ -1,5 +1,7 @@
 'use client';
 
+// Pixel Fireworks Component
+// A pixel art style fireworks/confetti celebration effect
 import { useEffect, useState } from 'react';
 
 interface PixelConfettiProps {
@@ -43,7 +45,7 @@ export default function PixelConfetti({ show, darkMode }: PixelConfettiProps) {
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
-  // Generate a random ASCII character for the confetti - more minimal set
+  // Generate a random ASCII character for the fireworks display
   const getRandomCharacter = () => {
     // Use more minimal set of characters
     const characters = ['■', '□', '▪', '▫', '▲', '▼', '+', '×'];
@@ -123,7 +125,7 @@ export default function PixelConfetti({ show, darkMode }: PixelConfettiProps) {
     );
   };
 
-  // Initialize confetti effect when show prop becomes true
+  // Initialize fireworks effect when show prop becomes true
   useEffect(() => {
     if (show) {
       // Clear any existing particles

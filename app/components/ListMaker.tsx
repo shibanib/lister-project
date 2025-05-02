@@ -19,6 +19,7 @@ import {
 import ListItem from './ListItem';
 import StyleOptions from './StyleOptions';
 import PixelConfetti from './PixelConfetti';
+import RainingConfetti from './RainingConfetti';
 
 type ListItem = {
   id: string;
@@ -92,6 +93,15 @@ export default function ListMaker() {
   const [showVisitCounter, setShowVisitCounter] = useState(false);
   const [visitCount, setVisitCount] = useState(0);
   const visitCounterRef = useRef<HTMLDivElement>(null);
+  // Updated confetti state
+  const [confettiType, setConfettiType] = useState<'pixel' | 'raining' | 'random'>('pixel');
+  // New state for celebration menu
+  const [showCelebrationMenu, setShowCelebrationMenu] = useState(false);
+  const celebrationMenuRef = useRef<HTMLDivElement>(null);
+  // Song reward state
+  const [showSongReward, setShowSongReward] = useState(false);
+  const [songRewardUrl, setSongRewardUrl] = useState<string | null>(null);
+  const songRewardRef = useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -616,6 +626,92 @@ export default function ListMaker() {
     return nonEmptyTasks.length > 0 && nonEmptyTasks.every(item => item.completed);
   };
 
+  // Toggle confetti type
+  const toggleConfettiType = (type: 'pixel' | 'raining' | 'random') => {
+    setConfettiType(type);
+    setShowCelebrationMenu(false);
+  };
+
+  // Toggle celebration menu
+  const toggleCelebrationMenu = () => {
+    setShowCelebrationMenu(!showCelebrationMenu);
+  };
+
+  // Get random song reward
+  const getRandomSongReward = () => {
+    // Playlist: https://youtube.com/playlist?list=PL_OTW5FTd4IDwkg_Zm-rthOmlivUN-Gf8
+    // Instead of making API calls, we store the video IDs from the playlist
+    // This can be updated manually when new songs are added to the playlist
+    const playlistVideoIds = [
+      'dQw4w9WgXcQ', // Never Gonna Give You Up
+      'djV11Xbc914', // Take On Me
+      'ZbZSe6N_BXs', // Happy
+      'pRpeEdMmmQ0', // Here Comes the Sun
+      'y6120QOlsfU', // Sandstorm
+      'L_jWHffIx5E', // All Star
+      'fJ9rUzIMcZQ', // Bohemian Rhapsody
+      'btPJPFnesV4', // Eye of the Tiger
+      'FTQbiNvZqaY', // Toto - Africa
+      'kffacxfA7G4', // Baby
+      'PWgvGjAhvmw', // Hey Ya!
+      '3GwjfUFyY6M', // Celebration
+      '8SbUC-UaAxE', // Sweet Child O' Mine
+      '9bZkp7q19f0', // Gangnam Style
+      '5GL9JoH4Sws'  // I'm Still Standing
+    ];
+    
+    // Get a random video ID from the array
+    const randomVideoId = playlistVideoIds[Math.floor(Math.random() * playlistVideoIds.length)];
+    
+    // Construct the YouTube URL
+    return `https://youtu.be/${randomVideoId}`;
+  };
+
+  // Close celebration menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (celebrationMenuRef.current && !celebrationMenuRef.current.contains(event.target as Node)) {
+        setShowCelebrationMenu(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Close song reward dialog when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (songRewardRef.current && !songRewardRef.current.contains(event.target as Node)) {
+        setShowSongReward(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Check for all tasks completed and show song reward if appropriate
+  useEffect(() => {
+    // Only proceed if all tasks are completed and confetti type is random
+    if (allTasksCompleted() && confettiType === 'random' && !showSongReward) {
+      // 50% chance of getting a song reward
+      if (Math.random() > 0.5) {
+        const randomSong = getRandomSongReward();
+        setSongRewardUrl(randomSong);
+        
+        // Show the reward after a short delay to allow confetti to display first
+        const rewardTimer = setTimeout(() => {
+          setShowSongReward(true);
+        }, 1500);
+        
+        return () => clearTimeout(rewardTimer);
+      }
+    }
+  }, [allTasksCompleted(), confettiType]);
+
   return (
     <div 
       className="min-h-screen px-4 md:px-8 py-12 pb-36 md:pb-24 relative" 
@@ -626,8 +722,18 @@ export default function ListMaker() {
         fontSize: styleSettings.fontSize
       }}
     >
-      {/* Pixel Confetti - shows when all tasks are completed */}
-      <PixelConfetti show={allTasksCompleted()} darkMode={darkMode} />
+      {/* Confetti - shows when all tasks are completed */}
+      {confettiType === 'pixel' && (
+        <PixelConfetti show={allTasksCompleted()} darkMode={darkMode} />
+      )}
+      {confettiType === 'raining' && (
+        <RainingConfetti show={allTasksCompleted()} darkMode={darkMode} />
+      )}
+      {confettiType === 'random' && (
+        Math.random() > 0.5 ? 
+          <PixelConfetti show={allTasksCompleted()} darkMode={darkMode} /> : 
+          <RainingConfetti show={allTasksCompleted()} darkMode={darkMode} />
+      )}
       
       <div className="max-w-3xl mx-auto">
         <div className="mb-16 text-center">
@@ -795,6 +901,26 @@ export default function ListMaker() {
           </div>
         </button>
         
+        {/* Celebration Menu Toggle - Pixel Art Style */}
+        <button 
+          onClick={toggleCelebrationMenu} 
+          className="w-12 h-12 bg-black text-white font-bold flex items-center justify-center pixel-art-btn"
+          title="Celebration Settings"
+        >
+          <div className="pixel-art-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="pixel-celebration">
+              <rect x="10" y="2" width="2" height="2" fill="white" />
+              <rect x="8" y="4" width="6" height="2" fill="white" />
+              <rect x="6" y="6" width="10" height="2" fill="white" />
+              <rect x="4" y="8" width="14" height="2" fill="white" />
+              <rect x="6" y="10" width="10" height="2" fill="white" />
+              <rect x="8" y="12" width="6" height="2" fill="white" />
+              <rect x="10" y="14" width="2" height="2" fill="white" />
+              <rect x="4" y="16" width="14" height="2" fill="white" />
+            </svg>
+          </div>
+        </button>
+        
         {/* Visit Counter - Pixel Art Style */}
         <button 
           onClick={toggleVisitCounter} 
@@ -951,6 +1077,150 @@ export default function ListMaker() {
         </div>
       )}
 
+      {/* Celebration Menu Panel */}
+      {showCelebrationMenu && (
+        <div 
+          ref={celebrationMenuRef}
+          className="fixed bottom-40 right-1/2 translate-x-1/2 w-80 neo-settings-panel z-20 p-6 md:bottom-24 md:right-24 md:translate-x-0"
+          style={{ 
+            backgroundColor: styleSettings.backgroundColor,
+            borderColor: darkMode ? '#ffffff' : '#000000',
+            color: styleSettings.textColor
+          }}
+        >
+          <h3 className="text-base font-bold mb-4 uppercase"
+              style={{ fontFamily: styleSettings.fontFamily }}>
+            Celebration Settings
+          </h3>
+          <div className="flex flex-col space-y-4">
+            <button 
+              onClick={() => toggleConfettiType('pixel')}
+              className={`px-4 py-2 border-3 font-bold flex items-center ${confettiType === 'pixel' ? 'bg-black text-white' : ''}`}
+              style={{ 
+                borderColor: darkMode ? '#ffffff' : '#000000',
+                fontFamily: styleSettings.fontFamily
+              }}
+            >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="4" height="4" fill="currentColor" />
+                <rect x="12" y="4" width="4" height="4" fill="currentColor" />
+                <rect x="8" y="8" width="4" height="4" fill="currentColor" />
+                <rect x="4" y="12" width="4" height="4" fill="currentColor" />
+                <rect x="12" y="12" width="4" height="4" fill="currentColor" />
+              </svg>
+              Pixel Fireworks
+            </button>
+            <button 
+              onClick={() => toggleConfettiType('raining')}
+              className={`px-4 py-2 border-3 font-bold flex items-center ${confettiType === 'raining' ? 'bg-black text-white' : ''}`}
+              style={{ 
+                borderColor: darkMode ? '#ffffff' : '#000000',
+                fontFamily: styleSettings.fontFamily
+              }}
+            >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="2" width="2" height="2" fill="currentColor" />
+                <rect x="10" y="2" width="2" height="2" fill="currentColor" />
+                <rect x="16" y="2" width="2" height="2" fill="currentColor" />
+                <rect x="2" y="6" width="2" height="2" fill="currentColor" />
+                <rect x="8" y="6" width="2" height="2" fill="currentColor" />
+                <rect x="14" y="6" width="2" height="2" fill="currentColor" />
+                <rect x="6" y="10" width="2" height="2" fill="currentColor" />
+                <rect x="12" y="10" width="2" height="2" fill="currentColor" />
+                <rect x="4" y="14" width="2" height="2" fill="currentColor" />
+                <rect x="10" y="14" width="2" height="2" fill="currentColor" />
+                <rect x="16" y="14" width="2" height="2" fill="currentColor" />
+              </svg>
+              Raining Confetti
+            </button>
+            <button 
+              onClick={() => toggleConfettiType('random')}
+              className={`px-4 py-2 border-3 font-bold flex items-center ${confettiType === 'random' ? 'bg-black text-white' : ''}`}
+              style={{ 
+                borderColor: darkMode ? '#ffffff' : '#000000',
+                fontFamily: styleSettings.fontFamily
+              }}
+            >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="2" height="2" fill="currentColor" />
+                <rect x="8" y="4" width="2" height="2" fill="currentColor" />
+                <rect x="14" y="4" width="2" height="2" fill="currentColor" />
+                <rect x="6" y="8" width="2" height="2" fill="currentColor" />
+                <rect x="12" y="8" width="2" height="2" fill="currentColor" />
+                <rect x="10" y="12" width="2" height="2" fill="currentColor" />
+                <rect x="16" y="12" width="2" height="2" fill="currentColor" />
+                <rect x="4" y="16" width="2" height="2" fill="currentColor" />
+                <rect x="12" y="16" width="2" height="2" fill="currentColor" />
+              </svg>
+              Random Mode + Song Gift
+            </button>
+            
+            <div className="text-sm mt-2 pt-4 border-t-2" style={{ borderColor: darkMode ? '#ffffff' : '#000000' }}>
+              <p>Select Random Mode for a chance to get a song reward when you complete all tasks!</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Song Reward Dialog */}
+      {showSongReward && songRewardUrl && (
+        <div 
+          ref={songRewardRef}
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 neo-settings-panel z-50 p-6"
+          style={{ 
+            backgroundColor: styleSettings.backgroundColor,
+            borderColor: darkMode ? '#ffffff' : '#000000',
+            color: styleSettings.textColor,
+            boxShadow: '0 0 20px rgba(0, 0, 0, 0.3)',
+            border: `3px solid ${darkMode ? '#ffffff' : '#000000'}`
+          }}
+        >
+          <div className="text-center mb-4">
+            <svg className="inline-block w-8 h-8" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="2" width="8" height="2" fill="currentColor" />
+              <rect x="6" y="16" width="8" height="2" fill="currentColor" />
+              <rect x="2" y="6" width="2" height="8" fill="currentColor" />
+              <rect x="16" y="6" width="2" height="8" fill="currentColor" />
+              <rect x="6" y="6" width="8" height="8" fill="currentColor" />
+              <rect x="4" y="4" width="2" height="2" fill="currentColor" />
+              <rect x="14" y="4" width="2" height="2" fill="currentColor" />
+              <rect x="4" y="14" width="2" height="2" fill="currentColor" />
+              <rect x="14" y="14" width="2" height="2" fill="currentColor" />
+            </svg>
+          </div>
+          <h3 className="text-base font-bold mb-2 text-center uppercase"
+              style={{ fontFamily: styleSettings.fontFamily }}>
+            Congratulations!
+          </h3>
+          <p className="text-center mb-4">
+            You've completed all your tasks! Here's a song reward for your hard work.
+          </p>
+          <div className="flex justify-center mt-4">
+            <a 
+              href={songRewardUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-black text-white font-bold inline-flex items-center"
+              style={{ fontFamily: styleSettings.fontFamily }}
+            >
+              <svg className="w-4 h-4 mr-2" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="2" width="2" height="12" fill="white" />
+                <rect x="13" y="6" width="2" height="8" fill="white" />
+                <rect x="5" y="8" width="2" height="6" fill="white" />
+                <rect x="5" y="14" width="10" height="2" fill="white" />
+              </svg>
+              Open Song
+            </a>
+          </div>
+          <button 
+            onClick={() => setShowSongReward(false)}
+            className="absolute top-2 right-2 text-sm"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Instructions Panel */}
       {showInstructions && (
         <div 
@@ -986,6 +1256,18 @@ export default function ListMaker() {
                 <rect x="14" y="14" width="4" height="4" fill={darkMode ? 'black' : 'white'} />
               </svg>
             </strong> Toggle dark/light mode</li>
+            <li><strong>
+              <svg width="12" height="12" viewBox="0 0 20 20" className="inline-block mr-1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="2" width="2" height="2" fill="currentColor" />
+                <rect x="8" y="4" width="6" height="2" fill="currentColor" />
+                <rect x="6" y="6" width="10" height="2" fill="currentColor" />
+                <rect x="4" y="8" width="14" height="2" fill="currentColor" />
+                <rect x="6" y="10" width="10" height="2" fill="currentColor" />
+                <rect x="8" y="12" width="6" height="2" fill="currentColor" />
+                <rect x="10" y="14" width="2" height="2" fill="currentColor" />
+                <rect x="4" y="16" width="14" height="2" fill="currentColor" />
+              </svg>
+            </strong> Celebration settings (Try Random Mode for surprise songs!)</li>
             <li><strong><svg width="12" height="12" viewBox="0 0 20 20" className="inline-block mr-1" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="2" y="2" width="16" height="16" fill="currentColor" />
               <rect x="6" y="6" width="2" height="8" fill={darkMode ? 'black' : 'white'} />
@@ -1003,6 +1285,11 @@ export default function ListMaker() {
             <li><strong>↓:</strong> Download list as Markdown</li>
             <li><strong>↑:</strong> Upload Markdown list</li>
           </ul>
+          
+          <div className="mt-6 pt-4 text-xs text-center border-t-2" style={{ borderColor: darkMode ? '#ffffff' : '#000000' }}>
+            <p>THE LISTER v2.0</p>
+            <p className="mt-1 opacity-70">The minimal yet fun task manager</p>
+          </div>
         </div>
       )}
     </div>
